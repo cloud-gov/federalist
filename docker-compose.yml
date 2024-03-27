@@ -25,6 +25,7 @@ services:
     depends_on:
       - db
       - redis
+      - localstack
     environment:
       APP_HOSTNAME: http://localhost:1337
       DOMAIN: localhost:1337
@@ -34,11 +35,13 @@ services:
       UAA_HOST: http://localhost:9000
       UAA_HOST_DOCKER_URL: http://uaa:8080
       USER_AUDITOR: federalist
-      CLOUD_FOUNDRY_API_HOST: https://api.example.com
-      CLOUD_FOUNDRY_OAUTH_TOKEN_URL: https://login.example.com/oauth/token
+      CLOUD_FOUNDRY_API_HOST: http://cf-mock:1234
+      CLOUD_FOUNDRY_OAUTH_TOKEN_URL: http://cf-mock:1234/oauth/token
       CF_API_USERNAME: deploy_user
       CF_API_PASSWORD: deploy_pass
       PROXY_DOMAIN: localhost:1337
+      AWS_ENDPOINT_URL: http://localstack:4566
+      NODE_ENV: development
   bull-board:
     build:
       dockerfile: Dockerfile-app
@@ -110,3 +113,47 @@ services:
       HOST: 0.0.0.0
       PORT: 8989
     command: node app/scripts/echo.js
+  localstack:
+    build:
+      dockerfile: Dockerfile-localstack
+      context: .
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+  localstack-setup:
+    build:
+      dockerfile: Dockerfile-app
+      context: .
+    volumes:
+      - yarn:/usr/local/share/.cache/yarn
+      - .:/app
+      - nm-app:/app/node_modules
+    command: ["scripts/wait-for-it.sh", "localstack:4566", "--", "yarn", "localstack-setup"]
+    depends_on:
+      - localstack
+      - db # race condition waiting to happen as we don't wait for DB
+    environment:
+      NODE_ENV: development
+      AWS_ENDPOINT_URL: http://localstack:4566
+  cf-mock:
+    build:
+      dockerfile: Dockerfile-app
+      context: .
+    volumes:
+      - yarn:/usr/local/share/.cache/yarn
+      - .:/app
+      - nm-app:/app/node_modules
+    command: ["scripts/wait-for-it.sh", "db:5432", "--", "yarn", "cf-mock"]
+    ports:
+      - "1234:1234"
+    depends_on:
+      - db
+      - localstack
+    environment:
+      NODE_ENV: development
+      AWS_ENDPOINT_URL: http://localstack:4566

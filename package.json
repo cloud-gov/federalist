@@ -105,7 +105,9 @@
     "queued-builds-check": "node ./scripts/queued-builds-check.js",
     "test:e2e": "yarn playwright test",
     "create-test-users": "DOTENV_CONFIG_PATH=.env node -r dotenv/config ./scripts/create-test-users.js",
-    "remove-test-users": "DOTENV_CONFIG_PATH=.env node -r dotenv/config ./scripts/remove-test-users.js"
+    "remove-test-users": "DOTENV_CONFIG_PATH=.env node -r dotenv/config ./scripts/remove-test-users.js",
+    "localstack-setup": "NODE_ENV=development node ./scripts/localstack-setup.js",
+    "cf-mock": "NODE_ENV=development nodemon cf-mock/index.js"
   },
   "main": "index.js",
   "repository": {

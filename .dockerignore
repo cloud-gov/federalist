@@ -1,1 +1,53 @@
-.gitignore
+# Local config
+config/local.js
+config/local-from-staging.js
+
+# Webpack-generated assets
+public/js/bundle.js
+public/js/bundle.*.js*
+public/styles/styles.css
+public/styles/styles.*.css*
+public/styles/uswds.*.css*
+webpack-manifest.json
+webpackAssets
+public/stats.json
+dist
+
+
+# Node.js / NPM
+lib-cov
+*.seed
+*.log
+*.out
+*.pid
+npm-debug.log
+node_modules/
+coverage
+.nyc_output
+.yarn-cache
+
+# Miscellaneous
+*~
+*#
+.git
+.DS_STORE
+.netbeans
+nbproject
+.idea
+.node_history
+cf-ssh.yml
+.env
+.sass-cache
+current-sites.csv
+.vscode
+credentials*.json
+tmp
+ci/vars/.*
+uaa/cloudfoundry-identity-uaa-4.19.0.war
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/*
+!playwright/.auth/.gitkeep
+volume

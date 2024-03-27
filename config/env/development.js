@@ -7,4 +7,10 @@ module.exports = {
   userEnvVar: {
     key: 'shhhhhhhhhhh',
   },
+  s3BuildLogs: {
+    accessKeyId: 'test',
+    secretAccessKey: 'test',
+    region: 'us-gov-west-1',
+    bucket: 'build-logs',
+  },
 };

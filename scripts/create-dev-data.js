@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const { addDays, addMinutes } = require('date-fns');
 Promise.props = require('promise-props');
+const crypto = require('crypto');
 const BuildLogs = require('../api/services/build-logs');
 const { encrypt } = require('../api/services/Encryptor');
 const EventCreator = require('../api/services/EventCreator');
@@ -112,6 +113,10 @@ function socketIOError() {
       "AbortError: PUBLISH can't be processed. The connection is already closed.\n at handle_offline_command (/home/vcap/app/node_modules/redis/index.js:779:15)\n at RedisClient.internal_send_command (/home/vcap/app/node_modules/redis/index.js:813:9)\n at RedisClient.publish (/home/vcap/app/node_modules/redis/lib/commands.js:46:25)\n at RedisAdapter.broadcast (/home/vcap/app/node_modules/socket.io-redis/dist/index.js:265:28)\n at Namespace.emit (/home/vcap/app/node_modules/socket.io/dist/namespace.js:175:22)\n at Server.<computed> [as emit] (/home/vcap/app/node_modules/socket.io/dist/index.js:445:33)\n at emitBuildStatus (/home/vcap/app/api/controllers/build.js:32:30)\n at runMicrotasks (<anonymous>)\n at processTicksAndRejections (internal/process/task_queues.js:93:5)",
     message: 'redisAdapter pubClient error',
   };
+}
+
+function randomGitSha() {
+  return crypto.createHash('sha1').update(crypto.randomBytes(30)).digest('hex');
 }
 
 // Chainable helpers
@@ -380,6 +385,7 @@ async function createData() {
       user: user1.id,
       username: user1.username,
       token: 'fake-token',
+      requestedCommitSha: randomGitSha(),
     }),
     Build.create({
       branch: site1.defaultBranch,
@@ -388,9 +394,8 @@ async function createData() {
       user: user1.id,
       username: user1.username,
       token: 'fake-token',
-    }).then(build => build.update({
-      requestedCommitSha: '57ce109dcc2cb8675ccbc2d023f40f82a2deabe1',
-    })),
+      requestedCommitSha: randomGitSha(),
+    }),
     Build.create({
       branch: site1.demoBranch,
       source: 'fake-build',

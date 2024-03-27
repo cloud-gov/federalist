@@ -3,21 +3,6 @@ const CloudFoundryAPIClient = require('../utils/cfApiClient');
 
 const apiClient = new CloudFoundryAPIClient();
 
-const handleInvalidAccessKeyError = (error) => {
-  const validS3KeyUpdateEnv = process.env.NODE_ENV === 'development'
-    || process.env.NODE_ENV === 'test';
-
-  if (error.code === 'InvalidAccessKeyId' && validS3KeyUpdateEnv) {
-    const message = 'S3 keys out of date. Update them with `npm run update-local-config`';
-    throw {
-      message,
-      status: 400,
-    };
-  }
-
-  throw error;
-};
-
 function listTopLevelFolders(s3Client, path) {
   // Lists all top-level "folders" in the S3 bucket that start with
   // the given prefix path.
@@ -27,8 +12,7 @@ function listTopLevelFolders(s3Client, path) {
   return s3Client.listCommonPrefixes(path)
     .then(commonPrefixes => commonPrefixes.map(
       prefix => prefix.Prefix.split('/').slice(-2)[0]
-    ))
-    .catch(handleInvalidAccessKeyError);
+    ));
 }
 
 function listFilesPaged(s3Client, path, startAtKey = null) {
@@ -61,12 +45,10 @@ function listFilesPaged(s3Client, path, startAtKey = null) {
         files,
       };
     })
-    .catch(handleInvalidAccessKeyError);
 }
 
 function listPublishedPreviews(site) {
   const previewPath = `preview/${site.owner}/${site.repository}/`;
-
   return apiClient.fetchServiceInstanceCredentials(site.s3ServiceName)
     .then((credentials) => {
       const s3Client = new S3Helper.S3Client({

@@ -17,6 +17,9 @@ class S3Client {
     this.bucket = credentials.bucket;
     this.client = new S3({
       region: credentials.region,
+      // https://docs.localstack.cloud/user-guide/integrations/sdks/javascript/
+      // TODO: this might break dev; don't merge without fixing
+      forcePathStyle: process.env.NODE_ENV === 'development',
       credentials: {
         accessKeyId: credentials.accessKeyId,
         secretAccessKey: credentials.secretAccessKey,
@@ -46,6 +49,7 @@ class S3Client {
         results.push(...page[property]);
       }
     }
+
     return results;
   }
 
