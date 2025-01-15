@@ -3,12 +3,22 @@ const moment = require('moment');
 const { toInt } = require('../utils');
 const { sandboxDays } = require('../../config').app;
 
-const associate = ({ Organization, OrganizationRole, Role, Site, User }) => {
+const associate = ({
+  FileStorageService,
+  Organization,
+  OrganizationRole,
+  Role,
+  Site,
+  User,
+}) => {
   // Associations
   Organization.belongsToMany(User, {
     through: OrganizationRole,
     foreignKey: 'organizationId',
     otherKey: 'userId',
+  });
+  Organization.hasMany(FileStorageService, {
+    foreignKey: 'organizationId',
   });
   Organization.hasMany(OrganizationRole, {
     foreignKey: 'organizationId',

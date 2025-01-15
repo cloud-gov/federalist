@@ -155,7 +155,7 @@ describe('Published Branches API', () => {
       expect(branchNames).to.deep.equal([site.defaultBranch, site.demoBranch, 'abc']);
     });
 
-    it('should 403 if the user is not associated with the site', (done) => {
+    it('should 404 if the user is not associated with the site', (done) => {
       const user = factory.user();
       const site = factory.site();
       const cookie = authenticatedSession(user);
@@ -169,7 +169,7 @@ describe('Published Branches API', () => {
           request(app)
             .get(`/v0/site/${promisedValues.site.id}/published-branch`)
             .set('Cookie', promisedValues.cookie)
-            .expect(403),
+            .expect(404),
         )
         .then((response) => {
           validateAgainstJSONSchema(
@@ -258,7 +258,7 @@ describe('Published Branches API', () => {
       expect(response.body.name).to.equal('main');
     });
 
-    it('should 403 if the user is not associated with the site', (done) => {
+    it('should 404 if the user is not associated with the site', (done) => {
       const user = factory.user();
       const site = factory.site({
         defaultBranch: 'main',
@@ -274,7 +274,7 @@ describe('Published Branches API', () => {
           request(app)
             .get(`/v0/site/${promisedValues.site.id}/published-branch/main`)
             .set('Cookie', promisedValues.cookie)
-            .expect(403),
+            .expect(404),
         )
         .then((response) => {
           validateAgainstJSONSchema(

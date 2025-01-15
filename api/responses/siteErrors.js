@@ -7,6 +7,11 @@ module.exports = {
   NO_ASSOCIATED_ORGANIZATION: 'That user is not associated with this organization.',
   NO_ASSOCIATED_USER: 'That user is not associated with this site.',
   ADMIN_ACCESS_REQUIRED: 'You do not have administrative access to this repository',
+  NOT_FOUND: 'Not found',
   ORGANIZATION_REQUIRED: 'An organization must be specified when creating a new site',
   ORGANIZATION_INACTIVE: 'This organization has been deactivated.',
+  ORGANIZATION_MANAGER_ACCESS: 'You do not have manager access to this organization.',
+  ORGANIZATION_USER_ACCESS: 'You do not have access to this organization.',
+  SITE_FILE_STORAGE_EXISTS:
+    'The site already has an existing file storage services available.',
 };

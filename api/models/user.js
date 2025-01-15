@@ -3,6 +3,7 @@ const { toInt } = require('../utils');
 
 const associate = ({
   Build,
+  FileStorageUserAction,
   Organization,
   OrganizationRole,
   Role,
@@ -13,6 +14,9 @@ const associate = ({
   // Associations
   User.hasMany(Build, {
     foreignKey: 'user',
+  });
+  User.hasMany(FileStorageUserAction, {
+    foreignKey: 'userId',
   });
   User.hasMany(UserAction, {
     foreignKey: 'userId',

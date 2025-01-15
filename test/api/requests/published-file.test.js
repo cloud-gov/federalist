@@ -155,7 +155,7 @@ describe('Published Files API', () => {
       );
     });
 
-    it('should 403 if the user is not associated with the site', (done) => {
+    it('should 404 if the user is not associated with the site', (done) => {
       const user = factory.user();
       const site = factory.site({
         defaultBranch: 'main',
@@ -173,7 +173,7 @@ describe('Published Files API', () => {
               `/v0/site/${promisedValues.site.id}/published-branch/main/published-file`,
             )
             .set('Cookie', promisedValues.cookie)
-            .expect(403),
+            .expect(404),
         )
         .then((response) => {
           validateAgainstJSONSchema(

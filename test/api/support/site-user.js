@@ -6,7 +6,12 @@ const factory = require('./factory');
 // operators can provide existing user/org/site models as needed and the user will
 // still be added to the org, and the site will have it's organization set to the
 // organization
-async function createSiteUserOrg({ user = null, org = null, site = null } = {}) {
+async function createSiteUserOrg({
+  user = null,
+  org = null,
+  site = null,
+  roleName = 'user',
+} = {}) {
   if (!user) {
     // eslint-disable-next-line no-param-reassign
     user = await factory.user();
@@ -17,7 +22,7 @@ async function createSiteUserOrg({ user = null, org = null, site = null } = {}) 
     org = await factory.organization.create();
   }
 
-  await org.addRoleUser(user);
+  await org.addRoleUser(user, roleName);
 
   if (!site) {
     // eslint-disable-next-line no-param-reassign

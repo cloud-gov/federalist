@@ -13,7 +13,7 @@ const route = 'user-action';
 
 const notAuthenticatedError =
   'You are not permitted to perform this action. Are you sure you are logged in?';
-const notAuthorizedError = 'You are not authorized to perform that action';
+const notFound = 'Not found';
 
 const path = (id) => `${version}/${resource}/${id}/${route}`;
 
@@ -54,17 +54,17 @@ describe('UserAction API', () => {
         .catch(done);
     });
 
-    it('returns a 403 if the site is not associated with the user', (done) => {
+    it('returns a 404 i if the site is not associated with the user', (done) => {
       buildAuthenticatedSession()
-        .then((cookie) => makeGetRequest(403, { id: 0, cookie }))
+        .then((cookie) => makeGetRequest(404, { id: 0, cookie }))
         .then((response) => {
           validateAgainstJSONSchema(
             'GET',
             '/site/{site_id}/user-action',
-            403,
+            404,
             response.body,
           );
-          expect(response.body.message).to.equal(notAuthorizedError);
+          expect(response.body.message).to.equal(notFound);
           done();
         })
         .catch(done);

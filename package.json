@@ -101,6 +101,7 @@
     "migrate:up": "node migrate.js up || true",
     "migrate:down": "node migrate.js down",
     "migrate:test": "node migrate.js up --dry-run",
+    "migrate:test:down": "NODE_ENV=test node migrate.js down",
     "migrate:reset": "node migrate.js reset",
     "export:sites": "node ./scripts/exportSitesAsCsv.js",
     "serve-coverage": "serve -n -l 8080 ./coverage",

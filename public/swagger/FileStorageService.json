@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": ["id", "metadata", "createdAt", "updatedAt"],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "metadata": {
+      "type": "json"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

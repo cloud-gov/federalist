@@ -775,6 +775,31 @@ paths:
           description: Not found
           schema:
             $ref: 'Error.json'
+  /site/{site_id}/file-storage-service:
+    post:
+      summary: Create a site file storage service if the current user has permissions
+      parameters:
+        - name: site_id
+          in: path
+          description: the id of the site
+          type: integer
+      responses:
+        200:
+          description: The create site file storage service
+          schema:
+            $ref: 'FileStorageService.json'
+        400:
+          description: Bad request
+          schema:
+            $ref: 'Error.json'
+        403:
+          description: Not authorized
+          schema:
+            $ref: 'Error.json'
+        404:
+          description: Not found
+          schema:
+            $ref: 'Error.json'
   /site/{site_id}/published-branch:
     parameters:
       - name: site_id

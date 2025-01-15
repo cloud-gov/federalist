@@ -30,6 +30,7 @@ const validationFailed = (site, options, validationError) => {
 const associate = ({
   Build,
   Domain,
+  FileStorageService,
   Organization,
   OrganizationRole,
   Site,
@@ -44,6 +45,9 @@ const associate = ({
     foreignKey: 'site',
   });
   Site.hasMany(Domain, {
+    foreignKey: 'siteId',
+  });
+  Site.hasMany(FileStorageService, {
     foreignKey: 'siteId',
   });
   Site.hasMany(SiteBranchConfig, {

@@ -114,7 +114,8 @@ describe('Site authorizer', () => {
       const error = await authorizer.findOne(user, site).catch((err) => err);
 
       expect(error).to.be.throw;
-      return expect(error).to.equal(403);
+      expect(error.status).to.equal(404);
+      expect(error.message).to.equal(siteErrors.NOT_FOUND);
     });
     context('site that belongs to an inactive organization', () => {
       it(`should resolve if the site is associated
@@ -132,7 +133,8 @@ describe('Site authorizer', () => {
         const error = await authorizer.findOne(user, site).catch((err) => err);
 
         expect(error).to.be.throw;
-        return expect(error).to.equal(403);
+        expect(error.status).to.equal(403);
+        expect(error.message).to.equal(siteErrors.ORGANIZATION_INACTIVE);
       });
     });
     context('site is inactive', () => {
@@ -149,7 +151,8 @@ describe('Site authorizer', () => {
         const error = await authorizer.findOne(user, site).catch((err) => err);
 
         expect(error).to.be.throw;
-        return expect(error).to.equal(403);
+        expect(error.status).to.equal(403);
+        expect(error.message).to.equal(siteErrors.ORGANIZATION_INACTIVE);
       });
     });
   });
@@ -160,7 +163,8 @@ describe('Site authorizer', () => {
       const error = await authorizer.update(user, site).catch((err) => err);
 
       expect(error).to.be.throw;
-      return expect(error).to.equal(403);
+      expect(error.status).to.equal(404);
+      expect(error.message).to.equal(siteErrors.NOT_FOUND);
     });
     context('site that belongs to an inactive organization', () => {
       it(`should resolve if the site is associated
@@ -179,7 +183,8 @@ describe('Site authorizer', () => {
         const error = await authorizer.update(user, site).catch((err) => err);
 
         expect(error).to.be.throw;
-        return expect(error).to.equal(403);
+        expect(error.status).to.equal(403);
+        expect(error.message).to.equal(siteErrors.ORGANIZATION_INACTIVE);
       });
     });
     context('site is active', () => {
@@ -197,7 +202,8 @@ describe('Site authorizer', () => {
         const error = await authorizer.update(user, site).catch((err) => err);
 
         expect(error).to.be.throw;
-        return expect(error).to.equal(403);
+        expect(error.status).to.equal(403);
+        expect(error.message).to.equal(siteErrors.ORGANIZATION_INACTIVE);
       });
     });
   });
@@ -236,7 +242,8 @@ describe('Site authorizer', () => {
       const error = await authorizer.destroy(user, site).catch((err) => err);
 
       expect(error).to.be.throw;
-      return expect(error).to.equal(403);
+      expect(error.status).to.equal(404);
+      expect(error.message).to.equal(siteErrors.NOT_FOUND);
     });
 
     it(`should reject if the user is associated
