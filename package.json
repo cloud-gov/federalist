@@ -1,7 +1,7 @@
 {
   "name": "pages-core",
   "private": true,
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "",
   "keywords": [],
   "dependencies": {

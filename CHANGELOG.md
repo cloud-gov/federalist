@@ -1,3 +1,9 @@
+## 0.15.2 (2025-01-31)
+
+### Fixed
+
+- don't fetch site user model, allow admin rebuild
+
 ## 0.15.1 (2025-01-27)
 
 ### Fixed
