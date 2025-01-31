@@ -182,7 +182,7 @@ Our continuous integration pipeline is run on Concourse CI. To use Concourse, on
 This repository contains one deployment pipeline file which is used to deploy the application across three separate environments. This is acheived using the `boot` task from [`pages-pipeline-task`](https://github.com/cloud-gov/pages-pipeline-tasks/?tab=readme-ov-file#boot).
 
 Each pipeline deploys the Pages app/api, the admin app, and the queues app for a given environment. Notable differences between the per-environment pipelines:
-- `dev`: This pipeline runs when a PR is created against the `main` branch. It will deploy the API without waiting for lint/tests to pass. It sends back information about various tasks as Github status checks. It runs integration testing post-deployment.
+- `dev`: This pipeline runs when a PR is created against the `main` branch. It will deploy the API without waiting for lint/tests to pass. It sends back information about various tasks as Github status checks. It runs integration testing post-deployment. It will skip PRs which only change `package.json` or `CHANGELOG.md`, effectively skipping the `release` PRs.
 - `staging`: This pipeline runs when a new commit is added to the `main` branch. It updates a separate `release` branch which is used for automating releases and updating our changeleog. It runs integration testing post-deployment.
 - `production`: This pipeline runs when a new tag is added to the `main` branch. It will create a new Github release matching the tag and post the changelog to Slack.
 

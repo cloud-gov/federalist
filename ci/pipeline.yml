@@ -469,6 +469,7 @@ resources:
       base_branch: main
       disable_forks: true
       ignore_drafts: false
+      ignore_paths: ["package.json", "CHANGELOG.md"]
 
   #@ if/end env == 'staging':
   - name: src
