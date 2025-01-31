@@ -8,8 +8,7 @@ const validateAgainstJSONSchema = require('../support/validateAgainstJSONSchema'
 const app = require('../../../app');
 const EventCreator = require('../../../api/services/EventCreator');
 const { createSiteUserOrg } = require('../support/site-user');
-const CloudFoundryAPIClient = require('../../../api/utils/cfApiClient');
-const S3Helper = require('../../../api/services/S3Helper');
+const { stubSiteS3 } = require('../support/file-storage-service');
 
 describe('Domain API', () => {
   beforeEach(async () => {
@@ -145,35 +144,8 @@ describe('Domain API', () => {
 
     describe('when a manager creates a valid site file storage', () => {
       it('returns a 200', async () => {
-        const { site, user } = await createSiteUserOrg({ roleName: 'manager' });
+        const { site, user } = await stubSiteS3({ roleName: 'manager' });
         const cookie = await authenticatedSession(user);
-        const access_key_id = 'access-key-1';
-        const bucket = 'bucke-1';
-        const region = 'region-1';
-        const secret_access_key = 'secret-key-1';
-        const instance1 = await factory.createCFAPIResource({
-          name: site.s3ServiceName,
-        });
-
-        sinon
-          .stub(CloudFoundryAPIClient.prototype, 'fetchServiceInstance')
-          .withArgs(site.s3ServiceName)
-          .resolves(instance1);
-
-        sinon
-          .stub(CloudFoundryAPIClient.prototype, 'fetchServiceInstanceCredentials')
-          .withArgs(site.s3ServiceName)
-          .resolves({
-            access_key_id,
-            bucket,
-            region,
-            secret_access_key,
-          });
-
-        sinon
-          .stub(S3Helper.S3Client.prototype, 'putObject')
-          .withArgs('', '~assets/')
-          .resolves();
 
         const { body } = await request(app)
           .post(`/v0/site/${site.id}/file-storage-service`)

@@ -3,7 +3,7 @@ const { canCreateSiteStorage } = require('../authorizers/file-storage');
 const { serializeFileStorageService } = require('../serializers/file-storage');
 const { wrapHandlers } = require('../utils');
 const { Event } = require('../models');
-const { createSiteFileStorage } = require('../services/file-storage');
+const { SiteFileStorageSerivce } = require('../services/file-storage');
 
 module.exports = wrapHandlers({
   async create(req, res) {
@@ -11,12 +11,11 @@ module.exports = wrapHandlers({
     const siteId = parseInt(params.site_id, 10);
 
     try {
-      const { site, organization } = await canCreateSiteStorage(
-        { id: user.id },
-        { id: siteId },
-      );
+      const { site } = await canCreateSiteStorage({ id: user.id }, { id: siteId });
 
-      const fss = await createSiteFileStorage(site, organization, user);
+      const siteStorageService = new SiteFileStorageSerivce(site, user.id);
+      const client = await siteStorageService.init();
+      const fss = await client.createFileStorageService();
 
       EventCreator.audit(
         Event.labels.ORG_MANAGER_ACTION,

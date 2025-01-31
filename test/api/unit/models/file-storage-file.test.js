@@ -11,19 +11,22 @@ describe('FileStorageFile model', () => {
     ]),
   );
 
-  it('`name`, `key`, `fileStorageServiceId` is required', async () => {
+  it('`name`, `key`, `fileStorageServiceId`, `type` is required', async () => {
     const name = 'test.txt';
     const key = `/the/storage/key/${name}`;
+    const type = 'text/plain';
     const fss = await factory.fileStorageService.create();
 
     const fsf = await FileStorageFile.create({
       name,
       key,
+      type,
       fileStorageServiceId: fss.id,
     });
 
     expect(fsf.name).to.equal(name);
     expect(fsf.key).to.equal(key);
+    expect(fsf.type).to.equal(type);
     expect(fsf.fileStorageServiceId).to.equal(fss.id);
     expect(fsf.metadata).to.equal(null);
     expect(fsf.description).to.equal(null);
@@ -42,6 +45,7 @@ describe('FileStorageFile model', () => {
     const fsf = await FileStorageFile.create({
       name,
       key,
+      type: metadata.type,
       fileStorageServiceId: fss.id,
       description,
       metadata,
@@ -49,6 +53,7 @@ describe('FileStorageFile model', () => {
 
     expect(fsf.name).to.equal(name);
     expect(fsf.key).to.equal(key);
+    expect(fsf.type).to.equal(metadata.type);
     expect(fsf.fileStorageServiceId).to.equal(fss.id);
     expect(fsf.metadata).to.deep.equal(metadata);
     expect(fsf.description).to.equal(description);
@@ -60,10 +65,12 @@ describe('FileStorageFile model', () => {
   it('should error with invalid fileStorageServiceId foreign key', async () => {
     const name = 'test.txt';
     const key = `/the/storage/key/${name}`;
+    const type = 'text/plain';
 
     const error = await FileStorageFile.create({
       name,
       key,
+      type,
       fileStorageServiceId: 8675309,
     }).catch((e) => e);
 
@@ -89,6 +96,23 @@ describe('FileStorageFile model', () => {
   it('should error without a key`', async () => {
     const name = 'test.txt';
     const key = null;
+    const type = 'text/plain';
+    const fss = await factory.fileStorageService.create();
+
+    const error = await FileStorageFile.create({
+      name,
+      key,
+      type,
+      fileStorageServiceId: fss.id,
+    }).catch((e) => e);
+
+    expect(error).to.be.an('error');
+    expect(error.name).to.eq('SequelizeValidationError');
+  });
+
+  it('should error without a type`', async () => {
+    const name = 'test.txt';
+    const key = 'a/b/c';
     const fss = await factory.fileStorageService.create();
 
     const error = await FileStorageFile.create({

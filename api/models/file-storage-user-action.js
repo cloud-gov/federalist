@@ -1,11 +1,16 @@
 const ACTION_TYPES = [
   'CREATE_SITE_FILE_STORAGE_SERVICE',
   'CREATE_ORGANIZATION_FILE_STORAGE_SERVICE',
+  'CREATE_DIRECTORY',
   'UPLOAD_FILE',
   'RENAME_FILE',
   'MOVE_FILE',
   'DELETE_FILE',
 ].reduce((acc, cur) => {
+  return { ...acc, [cur]: cur };
+}, {});
+
+const METHODS = ['GET', 'POST', 'PUT', 'DELETE'].reduce((acc, cur) => {
   return { ...acc, [cur]: cur };
 }, {});
 
@@ -48,7 +53,8 @@ function define(sequelize, DataTypes) {
 
   FileStorageUserAction.associate = associate;
 
-  FileStorageUserAction.prototype.ACTION_TYPES = ACTION_TYPES;
+  FileStorageUserAction.ACTION_TYPES = ACTION_TYPES;
+  FileStorageUserAction.METHODS = METHODS;
 
   return FileStorageUserAction;
 }

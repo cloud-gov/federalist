@@ -12,6 +12,7 @@ async function build(params = {}) {
   let {
     name,
     key,
+    type,
     fileStorageServiceId = null,
     description = null,
     metadata = null,
@@ -25,6 +26,10 @@ async function build(params = {}) {
     key = increment('/key/path/');
   }
 
+  if (!type) {
+    type = 'file/plain';
+  }
+
   if (!fileStorageServiceId) {
     const fss = await fileStorageService.create();
     fileStorageServiceId = fss.id;
@@ -33,6 +38,7 @@ async function build(params = {}) {
   return FileStorageFile.create({
     name,
     key,
+    type,
     fileStorageServiceId,
     description,
     metadata,
