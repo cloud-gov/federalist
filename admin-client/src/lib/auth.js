@@ -23,6 +23,10 @@ function externalAuth(path, action, hidden = false) {
       opts = `resizable=yes,scrollbars=yes,width=${width},height=${height},top=${top},left=${left}`;
     }
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+    // force popup to prevent the tab from not handling auth redirects
+    opts += ',popup=true';
+
     const authWindow = window.open(url, 'authWindow', opts);
 
     const handleMessage = (e) => {
